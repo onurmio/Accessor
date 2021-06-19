@@ -6,16 +6,13 @@ class Accessor<T> {
   static Map<String, dynamic> _data = {};
   String _key;
 
-  Accessor(this._key);
+  Accessor(String key) : _key = key;
 
-  add(T variable) {
-    if (!_data.containsKey(_key))
-      _data[_key] = variable;
-    else
-      throw AccessorException("Invalid key!");
+  set value(T variable) {
+    _data[_key] = variable;
   }
 
-  T get get {
+  T get value {
     if (_data.containsKey(_key))
       return _data[_key];
     else
