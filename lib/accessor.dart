@@ -21,4 +21,11 @@ class Accessor<T> {
     else
       throw AccessorException("Invalid key!");
   }
+
+  remove() {
+    if (_data.containsKey(_key))
+      _data.remove(_key);
+    else
+      throw AccessorException("Invalid key!");
+  }
 }
