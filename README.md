@@ -1,8 +1,18 @@
-# accessor
+# Accessor
 
-A new Flutter project.
+A simple variable accessor.
 
-## Getting Started
+## Documentation
+
+Defining variable is like
+```dart
+    Accessor<int>("number").value = 5;
+```
+
+Also you can access the variable with same method
+```dart
+    Accessor<int>("number").value;
+```
 
 This project is a starting point for a Dart
 [package](https://flutter.dev/developing-packages/),
