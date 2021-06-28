@@ -32,7 +32,7 @@ class Accessor<T> {
   }
 
   static _checkData(String key, Function function) {
-    _checkKey(key, () {
+    return _checkKey(key, () {
       if (_data[key] != null)
         return function();
       else
@@ -46,7 +46,5 @@ class Accessor<T> {
     _data[_key] = variable;
   }
 
-  T get value {
-    return _checkData(_key, _data[_key]);
-  }
+  T get value => _checkData(_key, () => _data[_key]);
 }
