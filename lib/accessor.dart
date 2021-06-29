@@ -9,7 +9,7 @@ class Accessor<T> {
   Accessor(String key) : _key = key;
 
   void remove() {
-    _checkData(_key, _data.remove(_key));
+    _checkData(_key, () => _data.remove(_key));
   }
 
   static bool exists(String key) {
