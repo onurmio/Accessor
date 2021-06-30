@@ -9,7 +9,7 @@ class Accessor<T> {
   Accessor(String key) : _key = key;
 
   void remove() {
-    _checkData(_key, () => _data.remove(_key));
+    _checkKey(_key, () => _data.remove(_key));
   }
 
   static bool exists(String key) {
@@ -28,23 +28,19 @@ class Accessor<T> {
     if (_data.containsKey(key))
       return function();
     else
-      throw AccessorException("Invalid key!");
-  }
-
-  static _checkData(String key, Function function) {
-    return _checkKey(key, () {
-      if (_data[key] != null)
-        return function();
-      else
-        throw AccessorException("Data does not exist!");
-    });
+      throw AccessorException("key '$key' does not exist");
   }
 
   bool get isEmpty => _checkKey(_key, () => _data[_key] == null);
 
   set value(T variable) {
+    if (_data.containsKey(_key)) {
+      if (!checkType(_key, T))
+        throw AccessorException(
+            "type '${variable.runtimeType}' is not a subtype of type '${getType(_key)}'");
+    }
     _data[_key] = variable;
   }
 
-  T get value => _checkData(_key, () => _data[_key]);
+  T get value => _checkKey(_key, () => _data[_key]);
 }
