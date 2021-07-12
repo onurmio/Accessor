@@ -12,6 +12,10 @@ class Accessor<T> {
     _checkKey(_key, () => _data.remove(_key));
   }
 
+  static void removeAll(){
+    _data.clear();
+  }
+
   static bool exists(String key) {
     return _data.containsKey(key);
   }
