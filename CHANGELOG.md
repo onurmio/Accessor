@@ -1,3 +1,8 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Initial release.
+
+## 0.0.8
+
+* Change map structure.
+* Add listen functionality.
