@@ -6,57 +6,57 @@ import 'dart:collection';
 import 'package:accessor/accessorException.dart';
 
 class Accessor<T> {
-  static SplayTreeMap<String, _AccessorItem> _data = SplayTreeMap();
+  static SplayTreeMap<String, _AccessorItem> _items = SplayTreeMap();
   String _key;
 
   Accessor(String key) : _key = key;
 
   void remove() => _checkKey(_key, () {
-        _data[_key]!.data = null;
-        _data[_key]!.notify();
-        _data.remove(_key);
+        _items[_key]!.data = null;
+        _items[_key]!.notify();
+        _items.remove(_key);
       });
 
   void listen(Function(dynamic) listener) =>
-      _checkKey(_key, () => _data[_key]!.addListener(listener));
+      _checkKey(_key, () => _items[_key]!.addListener(listener));
 
   static void removeAll() {
-    _data.forEach((key, value) {
+    _items.forEach((key, value) {
       value.data = null;
       value.notify();
     });
-    _data.clear();
+    _items.clear();
   }
 
-  static bool exists(String key) => _data.containsKey(key);
+  static bool exists(String key) => _items.containsKey(key);
 
   static Type getType(String key) =>
-      _checkKey(key, () => _data[key]!.data.runtimeType);
+      _checkKey(key, () => _items[key]!.data.runtimeType);
 
   static bool checkType(String key, Type type) => getType(key) == type;
 
   static _checkKey(String key, Function function) {
-    if (_data.containsKey(key))
+    if (_items.containsKey(key))
       return function();
     else
       throw AccessorException("key '$key' does not exist");
   }
 
-  bool get isEmpty => _checkKey(_key, () => _data[_key] == null);
+  bool get isEmpty => _checkKey(_key, () => _items[_key] == null);
 
-  set value(T variable) {
-    if (_data.containsKey(_key)) {
+  set data(T variable) {
+    if (_items.containsKey(_key)) {
       if (!checkType(_key, T))
         throw AccessorException(
             "type '${variable.runtimeType}' is not a subtype of type '${getType(_key)}'");
-      _data[_key]!.data = variable;
-      _data[_key]!.notify();
+      _items[_key]!.data = variable;
+      _items[_key]!.notify();
       return;
     }
-    _data[_key] = _AccessorItem(variable);
+    _items[_key] = _AccessorItem(variable);
   }
 
-  T get value => _checkKey(_key, () => _data[_key]!.data);
+  T get data => _checkKey(_key, () => _items[_key]!.data);
 }
 
 class _AccessorItem {
