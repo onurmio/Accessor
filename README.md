@@ -6,13 +6,20 @@ A simple variable accessor.
 
 Defining variable is like
 ```dart
-    Accessor<int>("number").value = 5;
+    Accessor<int>("number").data = 5;
 ```
 
 Also you can access the variable with same method
 ```dart
-    Accessor<int>("number").value;
+    Accessor<int>("number").data;
 ```
+
+You can listen variable
+```dart
+    Accessor<int>("number").listen((data) => print(data.toString()));
+```
+
+>Note: Listen function triggered when value is changed or removed.
 
 This project is a starting point for a Dart
 [package](https://flutter.dev/developing-packages/),
