@@ -11,14 +11,23 @@ class Accessor<T> {
 
   Accessor(String key) : _key = key;
 
+  void listen(Function(dynamic) listener) {
+    try {
+      _checkKey(_key, () => _items[_key]!.addListener(listener));
+    } catch (e) {
+      _items[_key] = _AccessorItem(null);
+      _items[_key]!.addListener(listener);
+    }
+  }
+
+  void cleanListeners() =>
+      _checkKey(_key, () => _items[_key]!.cleanListeners());
+
   void remove() => _checkKey(_key, () {
         _items[_key]!.data = null;
         _items[_key]!.notify();
         _items.remove(_key);
       });
-
-  void listen(Function(dynamic) listener) =>
-      _checkKey(_key, () => _items[_key]!.addListener(listener));
 
   static void removeAll() {
     _items.forEach((key, value) {
@@ -33,7 +42,10 @@ class Accessor<T> {
   static Type getType(String key) =>
       _checkKey(key, () => _items[key]!.data.runtimeType);
 
-  static bool checkType(String key, Type type) => getType(key) == type;
+  static bool checkType(String key, Type type) {
+    Type itemType = getType(key);
+    return itemType == type || itemType == Null;
+  }
 
   static _checkKey(String key, Function function) {
     if (_items.containsKey(key))
@@ -42,7 +54,7 @@ class Accessor<T> {
       throw AccessorException("key '$key' does not exist");
   }
 
-  bool get isEmpty => _checkKey(_key, () => _items[_key] == null);
+  bool get isEmpty => _checkKey(_key, () => _items[_key]!.data == null);
 
   set data(T variable) {
     if (_items.containsKey(_key)) {
@@ -60,13 +72,15 @@ class Accessor<T> {
 }
 
 class _AccessorItem {
-  StreamController streamController = StreamController.broadcast();
+  StreamController _streamController = StreamController.broadcast();
   var data;
 
-  _AccessorItem(data) : data = data;
+  _AccessorItem(this.data);
 
   void addListener(Function(dynamic) listener) =>
-      streamController.stream.listen(listener);
+      _streamController.stream.listen(listener);
 
-  void notify() => streamController.add(data);
+  void cleanListeners() => _streamController = StreamController.broadcast();
+
+  void notify() => _streamController.add(data);
 }
