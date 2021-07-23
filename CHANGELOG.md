@@ -1,8 +1,13 @@
 ## 0.0.1
 
-* Initial release.
+- Initial release.
 
 ## 0.0.8
 
-* Change map structure.
-* Add listen functionality.
+- **Adjustment**: Change map structure.
+- **New**: Listenable variables.
+
+## 0.0.9
+
+- **Adjustment**: Rename class variables.
+- **Fix**: Predefined listen functions.
