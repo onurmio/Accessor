@@ -9,7 +9,7 @@ class Accessor<T> {
   static SplayTreeMap<String, _AccessorItem> _items = SplayTreeMap();
   String _key;
 
-  Accessor(String key) : _key = key;
+  Accessor(this._key);
 
   void listen(Function(dynamic) listener) {
     try {
