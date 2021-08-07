@@ -34,12 +34,16 @@ class Accessor<T> {
       throw AccessorException("key '$key' does not exist");
   }
 
-  void listen(Function(dynamic) listener) {
+  static _createKey(String key) {
     try {
-      _checkKey(_key, () {});
+      _checkKey(key, () {});
     } catch (e) {
-      _items[_key] = AccessorItem(null);
+      _items[key] = AccessorItem(key, null);
     }
+  }
+
+  void listen(Function(dynamic) listener) {
+    _createKey(_key);
     _items[_key]!.addListener(listener);
   }
 
@@ -47,14 +51,8 @@ class Accessor<T> {
       _checkKey(_key, () => _items[_key]!.cleanListeners());
 
   void bind(String key) {
-    _checkKey(_key, () {
-      try {
-        _checkKey(key, () {});
-      } catch (e) {
-        _items[key] = AccessorItem(null);
-      }
-      _items[_key]!.bind(_items[key]!);
-    });
+    _createKey(key);
+    _items[_key]!.bind(_items[key]!);
   }
 
   void unbind(String key) {
@@ -65,6 +63,15 @@ class Accessor<T> {
   void bindList(List<String> keys) => keys.forEach((key) => bind(key));
 
   void unbindList(List<String> keys) => keys.forEach((key) => unbind(key));
+
+  void enableLogging() {
+    _createKey(_key);
+    _items[_key]!.enableLogging();
+  }
+
+  void disableLogging() {
+    _checkKey(_key, () => _items[_key]!.disableLogging());
+  }
 
   void remove() => _checkKey(_key, () {
         _items[_key]!.data = null;
@@ -83,7 +90,7 @@ class Accessor<T> {
       _items[_key]!.notify();
       return;
     }
-    _items[_key] = AccessorItem(variable);
+    _items[_key] = AccessorItem(_key, variable);
   }
 
   T get data => _checkKey(_key, () => _items[_key]!.data);

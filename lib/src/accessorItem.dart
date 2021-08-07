@@ -1,12 +1,21 @@
 import 'package:accessor/src/accessorException.dart';
+import 'package:logger/logger.dart';
 
 import 'accessorStream.dart';
 
 class AccessorItem {
   String? _streamKey;
+  bool _logging = false;
+  final Logger _logger = Logger(
+      printer: PrettyPrinter(
+    printTime: true,
+    methodCount: 0,
+  ));
+
+  String _key;
   var data;
 
-  AccessorItem(this.data);
+  AccessorItem(String key, this.data) : _key = key;
 
   void addListener(Function(dynamic) listener) {
     if (_streamKey == null) {
@@ -33,12 +42,22 @@ class AccessorItem {
   }
 
   void notify() {
+    if (_logging)
+      _logger.d({
+        "key": _key,
+        "data": data,
+        "streamKey": _streamKey,
+      });
     if (isBonded) AccessorStream(_streamKey!).notify(data);
   }
 
   void cleanListeners() {
     if (isBonded) AccessorStream(_streamKey!).cleanListeners();
   }
+
+  enableLogging() => _logging = true;
+
+  disableLogging() => _logging = false;
 
   bool get isBonded =>
       _streamKey != null ? AccessorStream(_streamKey!).isBonded(this) : false;
