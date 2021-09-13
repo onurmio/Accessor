@@ -5,9 +5,14 @@ import 'package:accessor/src/accessorItem.dart';
 
 class Accessor<T> {
   static SplayTreeMap<String, AccessorItem> _items = SplayTreeMap();
-  String _key;
+  late String _key;
 
-  Accessor(this._key);
+  Accessor({String? key}){
+    if(key != null)
+      _key = key;
+    else
+      _key = T.hashCode.toString();
+  }
 
   static void removeAll() {
     _items.forEach((key, value) {
