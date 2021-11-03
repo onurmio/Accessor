@@ -7,8 +7,8 @@ class Accessor<T> {
   static SplayTreeMap<String, AccessorItem> _items = SplayTreeMap();
   late String _key;
 
-  Accessor({String? key}){
-    if(key != null)
+  Accessor({String? key}) {
+    if (key != null)
       _key = key;
     else
       _key = T.hashCode.toString();
@@ -22,7 +22,7 @@ class Accessor<T> {
     _items.clear();
   }
 
-  static bool exists(String key) => _items.containsKey(key);
+  bool exist() => _items.containsKey(_key);
 
   static Type getType(String key) =>
       _checkKey(key, () => _items[key]!.data.runtimeType);
