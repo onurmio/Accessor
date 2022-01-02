@@ -1,17 +1,18 @@
 import 'dart:collection';
-
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:accessor/src/accessorException.dart';
 import 'package:accessor/src/accessorItem.dart';
 
 class Accessor<T> {
-  static SplayTreeMap<String, AccessorItem> _items = SplayTreeMap();
+  static HashMap<String, AccessorItem> _items = HashMap();
   late String _key;
 
   Accessor({String? key}) {
     if (key != null)
-      _key = key;
+      _key = md5.convert(utf8.encode(key + T.hashCode.toString())).toString();
     else
-      _key = T.hashCode.toString();
+      _key = md5.convert(utf8.encode(T.hashCode.toString())).toString();
   }
 
   static void removeAll() {
