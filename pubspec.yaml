@@ -1,6 +1,6 @@
 name: accessor
 description: A simple variable accessor.
-version: 1.0.1
+version: 1.0.2
 repository: https://github.com/onurmio/Accessor
 
 environment:
@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   uuid: ^3.0.4
   logger: ^1.0.0
+  crypto: ^3.0.2
 
 dev_dependencies:
   flutter_test:
