@@ -10,9 +10,9 @@ class Accessor<T> {
 
   Accessor({String? key}) {
     if (key != null)
-      _key = md5.convert(utf8.encode(key + T.hashCode.toString())).toString();
+      _key = md5.convert(utf8.encode(key + T.toString())).toString();
     else
-      _key = md5.convert(utf8.encode(T.hashCode.toString())).toString();
+      _key = md5.convert(utf8.encode(T.toString())).toString();
   }
 
   static void removeAll() {
